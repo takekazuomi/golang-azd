@@ -1,0 +1,9 @@
+version: v2
+modules:
+  - path: api-specs
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE
