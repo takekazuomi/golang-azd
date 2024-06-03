@@ -1,0 +1,27 @@
+{
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "connectrpc",
+        "echoserver",
+        "echov",
+        "opentelemetry",
+        "OTEL",
+        "otelprovider",
+        "OTLP",
+        "otlpmetricgrpc",
+        "otlptrace",
+        "otlptracegrpc",
+        "protoc",
+        "sdkmetric",
+        "sdktrace",
+        "semconv",
+        "takekazu",
+        "tracecontext",
+        "xerrors"
+    ],
+    "ignoreWords": [],
+    "import": []
+}
