@@ -1,0 +1,4 @@
+export AZURE_ENV_NAME="omidev01"
+export AZURE_LOCATION="eastus2"
+export AZURE_SUBSCRIPTION_ID="eb366cce-61a4-447f-b5d0-cf4a7a262b37"
+export AZURE_TENANT_ID="c4f02594-046e-4097-baa5-3d5dce55607f"

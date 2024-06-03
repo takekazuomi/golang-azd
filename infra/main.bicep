@@ -163,3 +163,4 @@ module monitoring './core/monitor/monitoring.bicep' = {
 // To see these outputs, run `azd env get-values`,  or `azd env get-values --output json` for json output.
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
+output ACR_NAME string = containerApps.outputs.registryName
