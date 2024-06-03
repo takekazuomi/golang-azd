@@ -116,7 +116,7 @@ resource app 'Microsoft.App/containerApps@2024-03-01' = {
       ingress: ingressEnabled ? {
         external: external
         targetPort: targetPort
-        transport: 'auto'
+        transport: 'http2'
         corsPolicy: {
           allowedOrigins: union([ 'https://portal.azure.com', 'https://ms.portal.azure.com' ], allowedOrigins)
         }
