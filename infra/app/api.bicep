@@ -11,6 +11,8 @@ param keyVaultName string
 param serviceName string = 'api'
 //param corsAcaUrl string
 param exists bool
+param imageName string
+param targetPort int
 
 resource apiIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: identityName
@@ -41,6 +43,7 @@ module app '../core/host/container-app-upsert.bicep' = {
     containerRegistryHostSuffix: containerRegistryHostSuffix
     containerCpuCoreCount: '0.5'
     containerMemory: '1.0Gi'
+    imageName: imageName
     env: [
       {
         name: 'AZURE_CLIENT_ID'
@@ -59,7 +62,7 @@ module app '../core/host/container-app-upsert.bicep' = {
       //   value: corsAcaUrl
       // }
     ]
-    targetPort: 51051
+    targetPort: targetPort
   }
 }
 

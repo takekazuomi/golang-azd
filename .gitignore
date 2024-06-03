@@ -1,2 +1,4 @@
 .azure
 .env
+build_number_*
+

@@ -5,10 +5,12 @@
     "dictionaries": [],
     "words": [
         "connectrpc",
+        "dumpenv",
         "echoserver",
         "echov",
         "opentelemetry",
         "OTEL",
+        "otelconnect",
         "otelprovider",
         "OTLP",
         "otlpmetricgrpc",

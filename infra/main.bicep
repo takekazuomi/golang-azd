@@ -47,6 +47,9 @@ param containerRegistryHostSuffix string = 'azurecr.io'
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
 
+@description('image name of api container')
+param imageName string = ''
+
 //@description('The base URL used by the web service for sending API requests')
 //param webApiBaseUrl string = ''
 
@@ -118,6 +121,8 @@ module api './app/api.bicep' = {
     keyVaultName: keyVault.outputs.name
 //    corsAcaUrl: corsAcaUrl
     exists: apiAppExists
+    imageName: imageName
+    targetPort: 8080
   }
 }
 

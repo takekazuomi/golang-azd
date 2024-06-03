@@ -12,6 +12,7 @@ KO_DOCKER_REPO	?= $(ACR_NAME).azurecr.io
 TAG_VERSION		?= 0.0.1-dev-$(shell date +%Y%m%d)
 BUILD_NUMBER_FILE	?= build_number_$(TAG_VERSION).txt
 TAG_COUNT		?= $(shell cat $(BUILD_NUMBER_FILE))
+IMAGE_NAME		?= $(KO_DOCKER_REPO)/server:$(TAG_VERSION)-$(TAG_COUNT) 
 
 help:	## show this help
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "%-10s %s\n", $$1, $$2}'
@@ -42,7 +43,7 @@ generate:	## run buf generate
 build_up:
 	@if [[ ! -f $(BUILD_NUMBER_FILE) ]] ; then echo 0 > $(BUILD_NUMBER_FILE); fi
 	@echo $$(($$(cat $(BUILD_NUMBER_FILE)) + 1)) > $(BUILD_NUMBER_FILE)
-	
+
 lint-golangci:	# run golangci-lint
 	docker run --rm -v $$(pwd):/app -v ~/.cache/golangci-lint/v1.58.0:/root/.cache -w /app golangci/golangci-lint:v1.58.0 golangci-lint run
 
@@ -51,12 +52,15 @@ lint-buf:	# run buf lint
 
 ## infra
 
+deploy:	## deploy infra
+	env IMAGE_NAME=$(IMAGE_NAME) az deployment sub create --location $(AZURE_LOCATION) --template-file ./infra/main.bicep --parameters infra/main.bicepparam --name $(TAG_VERSION)-$(TAG_COUNT)
+
 provision:	## provision infra
 	azd priovision
 
-infra-sync:	## azd 設定をazure環境に同期
+infra-refresh:	## azd 設定をazure環境に同期
 	azd env refresh 
-	azd env get-values > .env
+	azd env get-values | tr -d '"' > .env
 
 ## for local development
 

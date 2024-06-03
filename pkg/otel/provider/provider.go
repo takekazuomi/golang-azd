@@ -7,11 +7,9 @@ import (
 	"time"
 
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
-	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
@@ -42,28 +40,29 @@ func Init(ctx context.Context, serviceNameKey string) (func(), error) {
 		otelAgentAddr = "0.0.0.0:4317"
 	}
 
-	metricExp, err := otlpmetricgrpc.New(
-		ctx,
-		otlpmetricgrpc.WithInsecure(),
-		otlpmetricgrpc.WithEndpoint(otelAgentAddr))
-	if err != nil {
-		return nil, xerrors.Errorf("failed to create the collector metric exporter. %w", err)
-	}
+	// Azure では、metrics はサポートされていないので、コメントアウト
+	// metricExp, err := otlpmetricgrpc.New(
+	// 	ctx,
+	// 	otlpmetricgrpc.WithInsecure(),
+	// 	otlpmetricgrpc.WithEndpoint(otelAgentAddr))
+	// if err != nil {
+	// 	return nil, xerrors.Errorf("failed to create the collector metric exporter. %w", err)
+	// }
 
-	meterProvider := sdkmetric.NewMeterProvider(
-		sdkmetric.WithResource(res),
-		sdkmetric.WithReader(
-			sdkmetric.NewPeriodicReader(
-				metricExp,
-				sdkmetric.WithInterval(60*time.Second), // TODO: この部分はパラメータでもらうようにする
-			),
-		),
-	)
-	otel.SetMeterProvider(meterProvider)
+	// meterProvider := sdkmetric.NewMeterProvider(
+	// 	sdkmetric.WithResource(res),
+	// 	sdkmetric.WithReader(
+	// 		sdkmetric.NewPeriodicReader(
+	// 			metricExp,
+	// 			sdkmetric.WithInterval(60*time.Second), // TODO: この部分はパラメータでもらうようにする
+	// 		),
+	// 	),
+	// )
+	// otel.SetMeterProvider(meterProvider)
 
 	traceClient := otlptracegrpc.NewClient(
 		otlptracegrpc.WithInsecure(),
-		otlptracegrpc.WithEndpoint(otelAgentAddr))
+		otlptracegrpc.WithEndpointURL(otelAgentAddr))
 
 	traceExp, err := otlptrace.New(ctx, traceClient)
 	if err != nil {
@@ -89,9 +88,9 @@ func Init(ctx context.Context, serviceNameKey string) (func(), error) {
 			otel.Handle(err)
 		}
 
-		// pushes any last exports to the receiver
-		if err := meterProvider.Shutdown(cxt); err != nil {
-			otel.Handle(err)
-		}
+		// // pushes any last exports to the receiver
+		// if err := meterProvider.Shutdown(cxt); err != nil {
+		// 	otel.Handle(err)
+		// }
 	}, nil
 }

@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"os"
 
 	"connectrpc.com/connect"
 	"connectrpc.com/otelconnect"
@@ -17,6 +19,8 @@ import (
 )
 
 func main() {
+	dumpenv()
+
 	ctx := context.Background()
 
 	shutdown, err := otelprovider.Init(ctx, echov1connect.EchoServiceName)
@@ -38,8 +42,14 @@ func main() {
 	mux.Handle(path, handler)
 
 	http.ListenAndServe(
-		"localhost:8080",
+		":8080",
 		// Use h2c so we can serve HTTP/2 without TLS.
 		h2c.NewHandler(mux, &http2.Server{}),
 	)
+}
+
+func dumpenv() {
+	for _, e := range os.Environ() {
+		fmt.Println(e)
+	}
 }
