@@ -51,10 +51,11 @@ https://github.com/Azure-Samples/azd-starter-bicep
 
 ## TODO
 
-- otel connect
 - grpc reflection を入れる
-- ko publish
-- aca deploy
-- connect otel
-  - https://buf.build/blog/connect-opentelemetry-go
-- otel local collector. jagger or ?
+- README更新
+- storage access
+- db access
+- https call
+- grpc call
+- redis ?
+- blog
